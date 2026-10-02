@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
 	semconv "go.opentelemetry.io/otel/semconv/v1.37.0"
 )
@@ -38,14 +39,18 @@ func Init(
 	otel.SetTracerProvider(tracerProvider)
 	otel.SetMeterProvider(meterProvider)
 
+	// W3C trace context + baggage so incoming/outgoing requests share the same trace
+	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(
+		propagation.TraceContext{},
+		propagation.Baggage{},
+	))
+
 	shutDown := func(ctx context.Context) error {
 		return errors.Join(
 			tracerProvider.Shutdown(ctx),
 			meterProvider.Shutdown(ctx),
 		)
 	}
-
-	_ = res
 
 	return shutDown, nil
 }
