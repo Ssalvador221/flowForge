@@ -1,7 +1,7 @@
 package job
 
 import (
-	"FlowForge/internal/domain/consts"
+	"FlowForge/internal/utils/consts"
 	"time"
 
 	"github.com/google/uuid"

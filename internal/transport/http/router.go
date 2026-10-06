@@ -1,16 +1,21 @@
 package http
 
 import (
-	handlers "FlowForge/internal/transport/http/routes"
+	"FlowForge/internal/transport/http/handlers"
+	"FlowForge/internal/transport/http/routes"
 
 	"github.com/gofiber/fiber/v3"
 )
 
+type Handlers struct {
+	Jobs *handlers.JobHandler
+}
+
 // Router Group
-func RegisterRoutes(app *fiber.App) {
+func RegisterRoutes(app *fiber.App, h Handlers) {
 	api := app.Group("/api")
 
-	handlers.RegisterJobRoutes(api)
-	handlers.RegisterEmailRoutes(api)
-	handlers.RegisterReportRoutes(api)
+	routes.RegisterJobRoutes(api, h.Jobs)
+	routes.RegisterEmailRoutes(api)
+	routes.RegisterReportRoutes(api)
 }

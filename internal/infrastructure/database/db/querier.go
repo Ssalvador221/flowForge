@@ -22,6 +22,7 @@ type Querier interface {
 	GetJobResult(ctx context.Context, jobID uuid.UUID) (JobResult, error)
 	ListJobAttempts(ctx context.Context, jobID uuid.UUID) ([]JobAttempt, error)
 	ListJobEvents(ctx context.Context, jobID uuid.UUID) ([]JobEvent, error)
+	ListJobs(ctx context.Context) ([]Job, error)
 	ListJobsByStatus(ctx context.Context, arg ListJobsByStatusParams) ([]Job, error)
 	UpdateJobStatus(ctx context.Context, arg UpdateJobStatusParams) (Job, error)
 }

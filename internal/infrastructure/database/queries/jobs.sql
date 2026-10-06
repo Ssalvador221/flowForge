@@ -7,6 +7,10 @@ RETURNING *;
 SELECT * FROM jobs
 WHERE id = $1;
 
+-- name: ListJobs :many
+SELECT * FROM jobs
+ORDER BY created_at DESC;
+
 -- name: ListJobsByStatus :many
 SELECT * FROM jobs
 WHERE status = $1

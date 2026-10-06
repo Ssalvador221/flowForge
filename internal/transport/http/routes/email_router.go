@@ -1,10 +1,10 @@
-package handlers
+package routes
 
 import "github.com/gofiber/fiber/v3"
 
 func RegisterEmailRoutes(router fiber.Router) {
 	email := router.Group("/email")
-	
+
 	// TOOD: Remove this return and add the real func
 	email.Get("/", func(c fiber.Ctx) error {
 		return c.SendString("email 1")

@@ -27,7 +27,7 @@ type Server struct {
 }
 
 // Init API HTTP Server
-func NewServer(addr, serviceName string, logger *slog.Logger) *Server {
+func NewServer(addr, serviceName string, logger *slog.Logger, h Handlers) *Server {
 	app := fiber.New(fiber.Config{
 		AppName:      serviceName,
 		ReadTimeout:  readTimeout,
@@ -50,7 +50,7 @@ func NewServer(addr, serviceName string, logger *slog.Logger) *Server {
 		requestLogger(logger),
 	)
 
-	RegisterRoutes(app)
+	RegisterRoutes(app, h)
 
 	return &Server{
 		app:    app,

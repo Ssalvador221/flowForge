@@ -16,3 +16,12 @@ const (
 	JobTypeSendEmail        JobType = "send_email"
 	JobTypeGenerateReport   JobType = "generate_report"
 )
+
+// IsValid reports whether t is one of the job types the workers know how to run
+func (t JobType) IsValid() bool {
+	switch t {
+	case JobTypeDocumentAnalysis, JobTypeSendEmail, JobTypeGenerateReport:
+		return true
+	}
+	return false
+}

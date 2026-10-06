@@ -281,6 +281,39 @@ func (q *Queries) ListJobEvents(ctx context.Context, jobID uuid.UUID) ([]JobEven
 	return items, nil
 }
 
+const listJobs = `-- name: ListJobs :many
+SELECT id, type, status, payload, created_at, started_at, completed_at FROM jobs
+ORDER BY created_at DESC
+`
+
+func (q *Queries) ListJobs(ctx context.Context) ([]Job, error) {
+	rows, err := q.db.Query(ctx, listJobs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []Job{}
+	for rows.Next() {
+		var i Job
+		if err := rows.Scan(
+			&i.ID,
+			&i.Type,
+			&i.Status,
+			&i.Payload,
+			&i.CreatedAt,
+			&i.StartedAt,
+			&i.CompletedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const listJobsByStatus = `-- name: ListJobsByStatus :many
 SELECT id, type, status, payload, created_at, started_at, completed_at FROM jobs
 WHERE status = $1

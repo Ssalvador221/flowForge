@@ -1,29 +1,16 @@
-package handlers
+package routes
 
-import "github.com/gofiber/fiber/v3"
+import (
+	"FlowForge/internal/transport/http/handlers"
+
+	"github.com/gofiber/fiber/v3"
+)
 
 // Jobs Router Group
-func RegisterJobRoutes(router fiber.Router) {
+func RegisterJobRoutes(router fiber.Router, h *handlers.JobHandler) {
 	jobs := router.Group("/jobs")
 
-	// TOOD: Remove this return and add the real func
-	jobs.Get("/", func(c fiber.Ctx) error {
-		return c.SendString("Jobs 1")
-	})
-
-	jobs.Get("/:id", func(c fiber.Ctx) error {
-		return c.SendString("Job by ID")
-	})
-
-	jobs.Post("/", func(c fiber.Ctx) error {
-		var job []string
-		if err := c.Bind().JSON(&job); err != nil {
-			return fiber.NewError(fiber.StatusBadRequest, "invalid JSON body")
-		}
-		if len(job) == 0 {
-			return fiber.NewError(fiber.StatusBadRequest, "body must be a non-empty JSON array")
-		}
-		return c.SendString(job[0])
-	})
-
+	jobs.Get("/", h.ListAll)
+	jobs.Get("/:id", h.GetJobByID)
+	jobs.Post("/", h.Create)
 }
